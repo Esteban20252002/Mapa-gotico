@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MapTiler Globe projection</title>
+  <script src="https://cdn.maptiler.com/maptiler-sdk-js/v3.0.1/maptiler-sdk.umd.min.js"></script>
+  <link href="https://cdn.maptiler.com/maptiler-sdk-js/v3.0.1/maptiler-sdk.css" rel="stylesheet" />
+   <!-- Importing MapTiler 3D js -->
+<script src="https://cdn.maptiler.com/maptiler-3d/v2.0.2/maptiler-3d.umd.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; background: #000; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+      //maptilersdk.config.apiKey = 'YOUR_MAPTILER_API_KEY_HERE';
+      const map = new maptilersdk.Map({
+        container: 'map', // container's id or the HTML element to render the map
+        style:  'https://api.maptiler.com/maps/0195f90c-badd-7923-96b8-51c2d093526b/style.json?key=yxGyyWYnCFimJGX6HzCQ',
+        center: [-15.45, -21.27], // starting position [lng, lat]
+        zoom: 0.75, // starting zoom
+        projection: 'globe' //enable globe projection
+      });
+
+      (async () => {
+        await map.onReadyAsync();
+
+        const layer3D = new maptiler3d.Layer3D("custom-3D-layer");
+        map.addLayer(layer3D);
+
+        // Increasing the intensity of the ambient light
+        layer3D.setAmbientLight({intensity: 2});
+
+        // Adding a point light
+        layer3D.addPointLight("point-light", {intensity: 30});
+
+
+
+        const originalDuckID = "duck";
+        await layer3D.addMeshFromURL(
+          originalDuckID,
+          "mt10.glb",
+          {
+            scale: 100000,
+            heading: 100,
+            lngLat: [-74.066399, 4.651463]
+          }
+        );
+
+
+      })();
+  </script>
+</body>
+</html>
